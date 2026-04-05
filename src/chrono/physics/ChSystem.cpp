@@ -103,21 +103,23 @@ ChSystem::ChSystem(const ChSystem& other) : m_RTF(0), collision_system(nullptr),
     setupcount = other.setupcount;
     write_matrix = other.write_matrix;
     output_dir = other.output_dir;
+    if (other.GetCollisionSystem())
+        SetCollisionSystemType(other.GetCollisionSystem()->GetType());
     SetTimestepperType(other.GetTimestepperType());
+    SetSolverType(other.GetSolverType());
     nthreads_chrono = other.nthreads_chrono;
     nthreads_eigen = other.nthreads_eigen;
     nthreads_collision = other.nthreads_collision;
+    max_penetration_recovery_speed = other.max_penetration_recovery_speed;
+    use_sleeping = other.use_sleeping;
+    ncontacts = other.ncontacts;
+    collision_callbacks = other.collision_callbacks;
+
+    descriptor = chrono_types::make_shared<ChSystemDescriptor>();
+
     is_initialized = false;
     is_updated = false;
     applied_forces_current = false;
-
-    max_penetration_recovery_speed = other.max_penetration_recovery_speed;
-    SetSolverType(other.GetSolverType());
-    use_sleeping = other.use_sleeping;
-
-    ncontacts = other.ncontacts;
-
-    collision_callbacks = other.collision_callbacks;
 }
 
 ChSystem::~ChSystem() {
@@ -1451,7 +1453,7 @@ unsigned int ChSystem::RemoveRedundantConstraints(bool remove_links, double qr_t
     ChSparseMatrix CqT = Cq.transpose();
     CqT.makeCompressed();
 
-    // Perform QR decomposition on Cq to identify linearly-dependant rows (ie. redundant scalar constraint equations)
+    // Perform QR decomposition on Cq to identify linearly-dependent rows (ie. redundant scalar constraint equations)
     Eigen::SparseQR<ChSparseMatrix, Eigen::COLAMDOrdering<int>> QR_dec;
     QR_dec.compute(CqT);
 
@@ -1539,7 +1541,7 @@ unsigned int ChSystem::RemoveRedundantConstraints(bool remove_links, double qr_t
         }
     }
 
-    // Modify ChLinkMate constaints based on new mask
+    // Modify ChLinkMate constraints based on new mask
     for (auto constrnewmask_it = constrnewmask_map.begin(); constrnewmask_it != constrnewmask_map.end();
          ++constrnewmask_it) {
         std::dynamic_pointer_cast<ChLinkMateGeneric>(constr_map[constrnewmask_it->first])
@@ -2075,7 +2077,7 @@ void ChSystem::ArchiveIn(ChArchiveIn& archive_in) {
     // version number
     /*int version =*/archive_in.VersionRead<ChSystem>();
 
-    // deserialize unerlying assembly
+    // deserialize underlying assembly
     archive_in >> CHNVP(assembly);
 
     // stream in all member data:

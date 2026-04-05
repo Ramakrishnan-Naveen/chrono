@@ -319,7 +319,7 @@ int SCMTerrain::GetNumContactPatches() const {
     return m_loader->m_num_contact_patches;
 }
 
-// Return the number of nodes in the erosion domain at last step (bulldosing effects).
+// Return the number of nodes in the erosion domain at last step (bulldozing effects).
 int SCMTerrain::GetNumErosionNodes() const {
     return m_loader->m_num_erosion_nodes;
 }
@@ -398,6 +398,7 @@ SCMLoader::SCMLoader(ChSystem* system, bool visualization_mesh) : m_soil_fun(nul
         m_trimesh_shape = std::shared_ptr<ChVisualShapeTriangleMesh>(new ChVisualShapeTriangleMesh);
         m_trimesh_shape->SetMutable(true);
         m_trimesh_shape->SetWireframe(true);
+        m_trimesh_shape->SetDoubleFaced(true);
         m_trimesh_shape->SetFixedConnectivity();
     }
 
