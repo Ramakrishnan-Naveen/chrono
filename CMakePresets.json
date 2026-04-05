@@ -50,7 +50,8 @@
 				"CMAKE_VERBOSE_MAKEFILE": "ON",
 				"CMAKE_C_COMPILER": "clang",
 				"CMAKE_CXX_COMPILER": "clang++",
-				"CMAKE_CUDA_COMPILER": "/usr/local/cuda-13.1/bin/nvcc",
+				"CMAKE_CUDA_COMPILER": "/usr/lib/nvidia-cuda-toolkit/bin/nvcc",
+				"CMAKE_CUDA_ARCHITECTURES": "native",
 				"CMAKE_INSTALL_PREFIX": "$env{INSTALL_DIR}",
 				"CH_ENABLE_MODULE_PARSERS": "ON",
 				"CH_ENABLE_MODULE_PERIDYNAMICS": "ON",
@@ -72,7 +73,7 @@
 				"CH_ENABLE_MODULE_PYTHON": "ON",
 				"CH_ENABLE_MODULE_SYNCHRONO": "OFF",
 				"CH_ENABLE_MODULE_FMI": "ON",
-				"CH_ENABLE_MODULE_ROS": "ON",
+				"CH_ENABLE_MODULE_ROS": "OFF",
 				"BUILD_BENCHMARKING": "ON",
 				"BUILD_TESTING": "ON",
 				"CH_ENABLE_OPENCRG": "ON",
@@ -104,7 +105,7 @@
 				"urdfdom_headers_DIR": "$env{HOME}/Packages/urdf/$env{LIB_DIR}/urdfdom_headers/cmake",
 				"console_bridge_DIR": "$env{HOME}/Packages/urdf/$env{LIB_DIR}/console_bridge/cmake",
 				"tinyxml2_DIR": "$env{HOME}/Packages/urdf/CMake",
-				"CUDA_TOOLKIT_ROOT_DIR": "/usr/local/cuda-13.1"
+				"CUDA_TOOLKIT_ROOT_DIR": "/usr/lib/nvidia-cuda-toolkit/bin"
 			}
 		},
 		{
