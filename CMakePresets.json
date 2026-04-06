@@ -95,7 +95,7 @@
 				"glslang_DIR": "$env{HOME}/Packages/vsg/lib/cmake/glslang/",
 				"SPIRV-Tools_DIR": "$env{HOME}/Packages/vsg/lib/cmake/SPIRV-Tools/",
 				"SPIRV-Tools-opt_DIR": "$env{HOME}/Packages/vsg/lib/cmake/SPIRV-Tools-opt/",
-				"SWIG_EXECUTABLE": "$env{HOME}/Packages/python/venv/bin/swig",
+				"SWIG_EXECUTABLE": "$env{HOME}/Packages/python/.venv/bin/swig",
 				"CH_USE_SENSOR_NVRTC": "ON",
 				"CH_USE_SYNCHRONO_FASTDDS": "ON",
 				"CMAKE_BUILD_TYPE": "Release",
@@ -104,8 +104,8 @@
 				"urdfdom_headers_DIR": "$env{HOME}/Packages/urdf/$env{LIB_DIR}/urdfdom_headers/cmake",
 				"console_bridge_DIR": "$env{HOME}/Packages/urdf/$env{LIB_DIR}/console_bridge/cmake",
 				"tinyxml2_DIR": "$env{HOME}/Packages/urdf/CMake",
-				"Python3_ROOT_DIR": "$env{HOME}/Packages/python/venv/",
-				"Python3_EXECUTABLE": "$env{HOME}/Packages/python/venv/bin/python",
+				"Python3_ROOT_DIR": "$env{HOME}/Packages/python/.venv/",
+				"Python3_EXECUTABLE": "$env{HOME}/Packages/python/.venv/bin/python",
 				"Python3_FIND_STRATEGY": "LOCATION"
 			}
 		},
