@@ -52,7 +52,7 @@
 				"CMAKE_CXX_COMPILER": "clang++",
 				"CMAKE_CUDA_COMPILER": "/usr/lib/nvidia-cuda-toolkit/bin/nvcc",
 				"CMAKE_CUDA_ARCHITECTURES": "native",
-				"CMAKE_INSTALL_PREFIX": "$env{INSTALL_DIR}",
+				"CMAKE_INSTALL_PREFIX": "$env{HOME}/Documents/workspace/chrono/chrono_build",
 				"CH_ENABLE_MODULE_PARSERS": "OFF",
 				"CH_ENABLE_MODULE_PERIDYNAMICS": "ON",
 				"CH_ENABLE_MODULE_IRRLICHT": "ON",
