@@ -70,7 +70,7 @@ ChSystemMulticore::~ChSystemMulticore() {
     delete data_manager;
 }
 
-bool ChSystemMulticore::AdvanceDynamics() {
+bool ChSystemMulticore::AdvanceDynamics(bool do_collision) {
     ResetTimers();
     timer_step.start();  // time elapsed for step (for RTF calculation)
 
@@ -90,7 +90,7 @@ bool ChSystemMulticore::AdvanceDynamics() {
     data_manager->system_timer.stop("update");
 
     data_manager->system_timer.start("collision");
-    if (collision_system) {
+    if (do_collision && collision_system) {
         collision_system->PreProcess();
         collision_system->Run();
         collision_system->PostProcess();
@@ -127,12 +127,14 @@ bool ChSystemMulticore::AdvanceDynamics() {
 
     // Scatter the states to the Chrono objects (bodies and shafts) and update
     // all physics items at the end of the step.
-    DynamicVector<real>& velocities = data_manager->host_data.v;
+    VectorType& velocities = data_manager->host_data.v;
     custom_vector<real3>& pos_pointer = data_manager->host_data.pos_rigid;
     custom_vector<quaternion>& rot_pointer = data_manager->host_data.rot_rigid;
 
-#pragma omp parallel for
-    for (int i = 0; i < assembly.bodylist.size(); i++) {
+    const real step = (real)GetStep();
+
+#pragma omp parallel for schedule(static)
+    for (int i = 0; i < (signed)assembly.bodylist.size(); i++) {
         if (data_manager->host_data.active_rigid[i] != 0) {
             auto& body = assembly.bodylist[i];
             body->Variables().State()(0) = velocities[i * 6 + 0];
@@ -142,15 +144,13 @@ bool ChSystemMulticore::AdvanceDynamics() {
             body->Variables().State()(4) = velocities[i * 6 + 4];
             body->Variables().State()(5) = velocities[i * 6 + 5];
 
-            body->VariablesQbIncrementPosition(GetStep());
-            body->VariablesQbSetSpeed(GetStep());
-
+            body->VariablesQbIncrementPosition(step);
+            body->VariablesQbSetSpeed(step);
             body->Update(ch_time, UpdateFlags::UPDATE_ALL);
 
-            // update the position and rotation vectors
-            pos_pointer[i] = (real3(body->GetPos().x(), body->GetPos().y(), body->GetPos().z()));
-            rot_pointer[i] =
-                (quaternion(body->GetRot().e0(), body->GetRot().e1(), body->GetRot().e2(), body->GetRot().e3()));
+            pos_pointer[i] = real3(body->GetPos().x(), body->GetPos().y(), body->GetPos().z());
+            rot_pointer[i] = quaternion(body->GetRot().e0(), body->GetRot().e1(),
+                                        body->GetRot().e2(), body->GetRot().e3());
         }
     }
 
@@ -334,8 +334,10 @@ void ChSystemMulticore::UpdateRigidBodies() {
     custom_vector<char>& active = data_manager->host_data.active_rigid;
     custom_vector<char>& collide = data_manager->host_data.collide_rigid;
 
-#pragma omp parallel for
-    for (int i = 0; i < assembly.bodylist.size(); i++) {
+#pragma omp parallel for schedule(static)
+    for (int i = 0; i < (signed)assembly.bodylist.size(); i++) {
+        // if (i + 4 < (signed)assembly.bodylist.size())
+        //     __builtin_prefetch(assembly.bodylist[i + 4].get(), 0, 1);
         auto& body = assembly.bodylist[i];
 
         body->Update(ch_time, UpdateFlags::UPDATE_ALL_NO_VISUAL);
@@ -643,7 +645,7 @@ void ChSystemMulticore::PrintStepStats() {
     data_manager->system_timer.PrintReport();
 }
 
-unsigned int ChSystemMulticore::GetNumContacts() {
+unsigned int ChSystemMulticore::GetNumContacts() const {
     if (!data_manager->cd_data)
         return 0;
 
