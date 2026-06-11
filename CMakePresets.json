@@ -48,10 +48,10 @@
 			],
 			"cacheVariables": {
 				"CMAKE_VERBOSE_MAKEFILE": "ON",
-				"CMAKE_C_COMPILER": "/opt/gcc-12.4.0/bin/gcc",
-				"CMAKE_CXX_COMPILER": "/opt/gcc-12.4.0/bin/g++",
+				"CMAKE_C_COMPILER": "/opt/gcc-14bin/gcc",
+				"CMAKE_CXX_COMPILER": "/opt/gcc-14/bin/g++",
 				"CMAKE_CUDA_COMPILER": "/usr/local/cuda-12.8/bin/nvcc",
-				"CMAKE_CUDA_HOST_COMPILER": "/opt/gcc-12.4.0/bin/gcc",
+				"CMAKE_CUDA_HOST_COMPILER": "/opt/gcc-14/bin/gcc",
 				"CMAKE_CUDA_ARCHITECTURES": "native",
 				"MPI_HOME": "/usr/lib64/openmpi",
 				"MPI_C_COMPILER": "/usr/lib64/openmpi/bin/mpicc",
